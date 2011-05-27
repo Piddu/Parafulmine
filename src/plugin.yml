@@ -1,0 +1,15 @@
+name: ParaFulmine
+main: parafulmine.ParaFulmine
+version: 1.1
+author: Piddu
+
+commands:
+   pflink:
+      description: Links 2 PFBlocks to create a wall. Player Must own both blocks. The first block must have no Links. Blocks must be aligned on X or Z axes and on the SAME Y
+      usage: "/pflink idnumber idnumber"
+   pfturret:
+      description: Activate Turret Mode
+      usage: "/pfturret idnumber"
+   pfturretuse:
+      description: Chose witch turret to use
+      usage: "/pfturretuse idnumber"
