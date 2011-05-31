@@ -1,4 +1,4 @@
-package com.alta189.sqllitelib;
+package com.alta189.sqlLibrary.SQLite;
 
 import java.io.File;
 import java.sql.Connection;
@@ -74,7 +74,12 @@ public class DatabaseHandler {
 		    
 		    return result;
 		} catch (SQLException ex) {
-			core.writeError("Error at SQL Query: " + ex.getMessage(), false);
+			if (ex.getMessage().toLowerCase().contains("locking") || ex.getMessage().toLowerCase().contains("locked")) {
+				return retryResult(query);
+			}else{
+				core.writeError("Error at SQL Query: " + ex.getMessage(), false);
+			}
+			
 		}
 		return null;
 	}
@@ -88,7 +93,12 @@ public class DatabaseHandler {
 		    
 		    
 		} catch (SQLException ex) {
-			if (!ex.toString().contains("not return ResultSet")) core.writeError("Error at SQL INSERT Query: " + ex, false);
+			
+			if (ex.getMessage().toLowerCase().contains("locking") || ex.getMessage().toLowerCase().contains("locked")) {
+				retry(query);
+			}else{
+				if (!ex.toString().contains("not return ResultSet")) core.writeError("Error at SQL INSERT Query: " + ex, false);
+			}
 			
 		}
 	}
@@ -102,7 +112,11 @@ public class DatabaseHandler {
 		    
 		    
 		} catch (SQLException ex) {
-			if (!ex.toString().contains("not return ResultSet")) core.writeError("Error at SQL UPDATE Query: " + ex.getMessage(), false);
+			if (ex.getMessage().toLowerCase().contains("locking") || ex.getMessage().toLowerCase().contains("locked")) {
+				retry(query);
+			}else{
+				if (!ex.toString().contains("not return ResultSet")) core.writeError("Error at SQL UPDATE Query: " + ex, false);
+			}
 		}
 	}
 	
@@ -115,7 +129,11 @@ public class DatabaseHandler {
 		    
 		    
 		} catch (SQLException ex) {
-			if (!ex.toString().contains("not return ResultSet")) core.writeError("Error at SQL DELETE Query: " + ex.getMessage(), false);
+			if (ex.getMessage().toLowerCase().contains("locking") || ex.getMessage().toLowerCase().contains("locked")) {
+				retry(query);
+			}else{
+				if (!ex.toString().contains("not return ResultSet")) core.writeError("Error at SQL DELETE Query: " + ex, false);
+			}
 		}
 	}
 	
@@ -132,7 +150,11 @@ public class DatabaseHandler {
 		    
 		    return true;
 		} catch (SQLException ex) {
-			if (!ex.toString().contains("not return ResultSet")) core.writeError("Error at SQL UPDATE Query: " + ex.getMessage(), false);
+			if (ex.getMessage().toLowerCase().contains("locking") || ex.getMessage().toLowerCase().contains("locked")) {
+				//retryWipe(query);
+			}else{
+				if (!ex.toString().contains("not return ResultSet")) core.writeError("Error at SQL WIPE TABLE Query: " + ex, false);
+			}
 			return false;
 		}
 	}
@@ -155,5 +177,57 @@ public class DatabaseHandler {
 			return false;
 		}
 		
+	}
+	
+	private ResultSet retryResult(String query) {
+		Boolean passed = false;
+		
+		while (!passed) {
+			try {
+				Connection connection = getConnection();
+			    Statement statement = connection.createStatement();
+			    
+			    ResultSet result = statement.executeQuery(query);
+			    
+			    passed = true;
+			    
+			    return result;
+			} catch (SQLException ex) {
+				
+				if (ex.getMessage().toLowerCase().contains("locking") || ex.getMessage().toLowerCase().contains("locked")) {
+					passed = false;
+				}else{
+					core.writeError("Error at SQL Query: " + ex.getMessage(), false);
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	private void retry(String query) {
+		Boolean passed = false;
+		
+		while (!passed) {
+			try {
+				Connection connection = getConnection();
+			    Statement statement = connection.createStatement();
+			    
+			    statement.executeQuery(query);
+			    
+			    passed = true;
+			    
+			    return;
+			} catch (SQLException ex) {
+				
+				if (ex.getMessage().toLowerCase().contains("locking") || ex.getMessage().toLowerCase().contains("locked") ) {
+					passed = false;
+				}else{
+					core.writeError("Error at SQL Query: " + ex.getMessage(), false);
+				}
+			}
+		}
+		
+		return;
 	}
 }

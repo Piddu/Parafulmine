@@ -1,4 +1,4 @@
-package com.alta189.sqllitelib;
+package com.alta189.sqlLibrary.SQLite;
 
 import java.io.File;
 import java.sql.Connection;
@@ -51,7 +51,7 @@ public class sqlCore {
 			dbFolder.mkdir();
 		}
 		
-		File SQLFile = new File(dbFolder.getAbsolutePath() + File.separator + dbName);
+		File SQLFile = new File(dbFolder.getAbsolutePath() + "/" + dbName);
 		
 		this.manageDB = new DatabaseHandler(this, SQLFile);
 		

@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.alta189.sqllitelib.*;
+import com.alta189.sqlLibrary.SQLite.*;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
