@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import com.alta189.sqlLibrary.SQLite.*;
 
+import parafulmine.ParaFulmine;
+
 
 public class PFintoDB {
 	
@@ -68,9 +70,7 @@ public class PFintoDB {
 		 				  		  String.valueOf(pfobj.BlockY) + "," +
 		 				  		  String.valueOf(pfobj.BlockZ)+ "," +
 		 				  		  "'" + pfobj.Owner.toString() + "'" + ")"+ ";";
-		dbManage.initialize();
-		dbManage.insertQuery(insertPF);
-		dbManage.close();
+		ParaFulmine.getManager().insertQuery(insertPF);
 	}
 	
 	//DELETE Query, delete a Record from DB by giving coordinates
@@ -79,9 +79,7 @@ public class PFintoDB {
 		  				  "BlockX" + " = " + "'" + String.valueOf(pfobj.BlockX) + "'" + "AND " +
 		  				  "BlockY" + " = " + "'" + String.valueOf(pfobj.BlockY) + "'" +  "AND " +
 		  				  "BlockZ" + " = " + "'" + String.valueOf(pfobj.BlockZ)+  "'" + ";" ;
-		dbManage.initialize();
-		dbManage.deleteQuery(deletePF); 
-		dbManage.close();
+		ParaFulmine.getManager().deleteQuery(deletePF); 
 	}
 	
 	//These methods are  SELECT QUERIES to get info by passing blocks coordinates.
@@ -91,15 +89,13 @@ public class PFintoDB {
 		  				  "BlockX" + " = " + "'" + String.valueOf(blockX) + "'" + "AND " +
 		  				  "BlockY" + " = " + "'" + String.valueOf(blockY) + "'" +  "AND " +
 		  				  "BlockZ" + " = " + "'" + String.valueOf(blockZ)+  "'" +";" ;
-		  dbManage.initialize();
-          ResultSet rs = dbManage.sqlQuery(selectID);
+          ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
           int Id = 0;
           try {
 			Id = rs.getInt("B_Id");
           } catch (SQLException e) {
 			e.printStackTrace();
           }
-          dbManage.close();
           return Id;  
 	}
 	
@@ -109,15 +105,13 @@ public class PFintoDB {
 		  				  "BlockX" + " = " + "'" + String.valueOf(blockX) + "'" + "AND " +
 		  				  "BlockY" + " = " + "'" + String.valueOf(blockY) + "'" +  "AND " +
 		  				  "BlockZ" + " = " + "'" + String.valueOf(blockZ)+  "'" +";" ;
-		dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         String Owner ="";
 		try {
 			Owner = rs.getString("Owner");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return Owner;
 	}
 	
@@ -127,15 +121,13 @@ public class PFintoDB {
 		  				  "BlockX" + " = " + "'" + String.valueOf(blockX) + "'" + "AND " +
 		                  "BlockY" + " = " + "'" + String.valueOf(blockY) + "'" +  "AND " +
 		                  "BlockZ" + " = " + "'" + String.valueOf(blockZ)+  "'" +";" ;
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         int Link =0;
 		try {
 			Link = rs.getInt("Link");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return Link;
 	}
 	
@@ -145,30 +137,26 @@ public class PFintoDB {
 	public int getRecordLink(int id2){
 		String selectID = "SELECT Link FROM " + tableName  + " WHERE " + 
 						  "B_Id " + " = " + "'" + String.valueOf(id2) + "'" + ";" ;
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         int Link =0;
 		try {
 			Link = rs.getInt("Link");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return Link;
 	}
 	//SELECT Query, SELECT the Record with the given id, return its Owner
 	public String getRecordOwner(int id){
 		String selectID = "SELECT Owner FROM " + tableName  + " WHERE " + 
 			              "B_Id " + " = " + "'" + String.valueOf(id) + "'"  + ";" ;
-		dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         String Owner ="";
 		try {
 			Owner = rs.getString("Owner");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return Owner;
 	}
 	
@@ -176,15 +164,13 @@ public class PFintoDB {
 	public int getRecordTurret(int id2){
 		String selectID = "SELECT Turret FROM " + tableName  + " WHERE " + 
 						  "B_Id " + " = " + "'" + String.valueOf(id2) + "'" + ";" ;
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         int Turret =0;
 		try {
 			Turret = rs.getInt("Turret");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return Turret;
 	}
 	
@@ -192,15 +178,13 @@ public class PFintoDB {
 	public int getRecordUse(int id2){
 		String selectID = "SELECT Use FROM " + tableName  + " WHERE " + 
 						  "B_Id " + " = " + "'" + String.valueOf(id2) + "'" + ";" ;
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         int use =0;
 		try {
 			use = rs.getInt("Use");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return use;
 	}
 	
@@ -208,30 +192,26 @@ public class PFintoDB {
 	public int getRecordBlockX(int id){
 		String selectID = "SELECT BlockX FROM " + tableName  + " WHERE " + 
 						  "B_Id " + " = " + "'" + String.valueOf(id) + "'" + ";" ;
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         int BlockX =0;
 		try {
 			BlockX = rs.getInt("BlockX");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return BlockX;
 	}
 	//SELECT Query, SELECT the Record with the given id, return its BlockY
 	public int getRecordBlockY(int id){
 		String selectID = "SELECT BlockY FROM " + tableName  + " WHERE " + 
 						  "B_Id " + " = " + "'" + String.valueOf(id) + "'" + ";" ;
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         int BlockY =0;
 		try {
 			BlockY = rs.getInt("BlockY");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return BlockY;
 	}
 	
@@ -239,15 +219,13 @@ public class PFintoDB {
 	public int getRecordBlockZ(int id){
 		String selectID = "SELECT BlockZ FROM " + tableName  + " WHERE " + 
 						  "B_Id " + " = " + "'" + String.valueOf(id) + "'" + ";" ;
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         int BlockZ =0;
 		try {
 			BlockZ = rs.getInt("BlockZ");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return BlockZ;
 	}
 	
@@ -258,9 +236,7 @@ public class PFintoDB {
 							"'" + String.valueOf(idnd) + "'" +
 							"WHERE B_Id" +
 		                    " = " + "'" + String.valueOf(idst) + "'" + ";";
-		dbManage.initialize();
-		dbManage.updateQuery(updateLink);
-		dbManage.close();
+		ParaFulmine.getManager().updateQuery(updateLink);
 	}
 	
 	//UPDATE Turret Query
@@ -269,9 +245,7 @@ public class PFintoDB {
 							"'" + String.valueOf(1) + "'" +
 							"WHERE B_Id" +
 		                    " = " + "'" + String.valueOf(id) + "'" + ";";
-		dbManage.initialize();
-		dbManage.updateQuery(updateLink);
-		dbManage.close();
+		ParaFulmine.getManager().updateQuery(updateLink);
 	}
 	//UPDATE Use Query
 	public void updateRecordUse(int id, int onoff){
@@ -279,9 +253,7 @@ public class PFintoDB {
 							"'" + String.valueOf(onoff) + "'" +
 							"WHERE B_Id" +
 		                    " = " + "'" + String.valueOf(id) + "'" + ";";
-		dbManage.initialize();
-		dbManage.updateQuery(updateLink);
-		dbManage.close();
+		ParaFulmine.getManager().updateQuery(updateLink);
 	}
 	
 	//UPDATE Links Query, set Link value to 0
@@ -290,23 +262,19 @@ public class PFintoDB {
 							"'" + 0 + "'" +
 							"WHERE Link" +
 		                    " = " + "'" + String.valueOf(idst) + "'" + ";";
-		dbManage.initialize();
-		dbManage.updateQuery(updateLink);
-		dbManage.close();
+		ParaFulmine.getManager().updateQuery(updateLink);
 	}
 	
 	//SELECT COUNT QUERY
 	public int exists(int id){
 		String selectcountID = "SELECT COUNT(B_Id) AS result FROM PFBlocks WHERE B_Id = " + "'" + id + "'" + ";"; 
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectcountID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectcountID);
         int count = 1;
 		try {
 			count = rs.getInt("result");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return count;
 	}
 	
@@ -315,15 +283,13 @@ public class PFintoDB {
 		  					   "BlockX" + " = " + "'" + String.valueOf(blockX) + "'" + " AND " +
 		  					   "BlockY" + " = " + "'" + String.valueOf(blockY) + "'" +  " AND " +
 		  					   "BlockZ" + " = " + "'" + String.valueOf(blockZ)+  "'" +";" ;
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectcountID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectcountID);
         int count = 0;
 		try {
 			count = rs.getInt("result");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         if(count == 0){
         	return false;
         }
@@ -335,15 +301,13 @@ public class PFintoDB {
 	public int using(String playername){
 		String selectcount = "SELECT B_Id FROM PFBlocks WHERE Owner = " + "'" + playername + "'" +
 							 " AND Use = " + "'" + String.valueOf(1) + "'" +";";
-		dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectcount);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectcount);
         int id = 0;
 		try {
 			id = rs.getInt("B_Id");
 		} catch (SQLException e) {
 			//e.printStackTrace();
 		}
-        dbManage.close();
         return id;
 	}
 	

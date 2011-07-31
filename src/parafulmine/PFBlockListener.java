@@ -126,23 +126,28 @@ public class PFBlockListener extends BlockListener{
     		//log.info(" is obsidian");
     		Block tblock = world.getBlockAt(bblock.getX(), bblock.getY()+1, bblock.getZ());
     		if(tblock.getTypeId() == topiron){//If iron block on top , regular lightning with damage
-    			world.strikeLightning(tblock.getLocation());
-    			//check if block is linked
     			PFintoDB pfobj = new PFintoDB(bblock.getX(), bblock.getY(), bblock.getZ());
-    			int link = pfobj.getRecordLinkXYZ(bblock.getX(), bblock.getY(), bblock.getZ());
-    			if(link != 0){
-    				//wall of lightning
-    				pfobj.setObjLink(link);
+    			if (pfobj.existsXYZ(bblock.getX(), bblock.getY(), bblock.getZ())== true){
+    				world.strikeLightning(tblock.getLocation());
     				int id = pfobj.getRecordId(bblock.getX(), bblock.getY(), bblock.getZ());
-    				pfobj.setObjId(id);
-    				wallOfZap(pfobj, world);
+	    			//check if block is linked
+	    			int link = pfobj.getRecordLink(id);
+	    			if(link != 0){
+	    				//wall of lightning
+	    				pfobj.setObjLink(link);
+	    				pfobj.setObjId(id);
+	    				wallOfZap(pfobj, world);
+	    			}
     			}
     			return;
     		}
     		else if (tblock.getTypeId() == topgold){//If gold block on top , only lightning effect no damage
-				world.strikeLightningEffect(tblock.getLocation());
-				Block toBeSmelt = world.getBlockAt(bblock.getX(), bblock.getY()+2, bblock.getZ());
-				smelt(world, toBeSmelt);
+    			GoldintoDB pfobj = new GoldintoDB(bblock.getX(), bblock.getY(), bblock.getZ());
+    			if (pfobj.existsXYZ(bblock.getX(), bblock.getY(), bblock.getZ())== true){
+					world.strikeLightningEffect(tblock.getLocation());
+					Block toBeSmelt = world.getBlockAt(bblock.getX(), bblock.getY()+2, bblock.getZ());
+					smelt(world, toBeSmelt);
+    			}
 				return;
     		}
     	}

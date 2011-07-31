@@ -35,9 +35,7 @@ public class GoldintoDB extends PFintoDB{
 		 				  		  String.valueOf(gobj.BlockY) + "," +
 		 				  		  String.valueOf(gobj.BlockZ)+ "," +
 		 				  		  "'" + gobj.Owner.toString() + "'" + ")"+ ";";
-		dbManage.initialize();
-		dbManage.insertQuery(insertPF);
-		dbManage.close();
+		ParaFulmine.getManager().insertQuery(insertPF);
 	}
 	
 	//DELETE Query, delete a Record from DB by giving coordinates
@@ -46,9 +44,7 @@ public class GoldintoDB extends PFintoDB{
 		  				  "BlockX" + " = " + "'" + String.valueOf(gobj.BlockX) + "'" + "AND " +
 		  				  "BlockY" + " = " + "'" + String.valueOf(gobj.BlockY) + "'" +  "AND " +
 		  				  "BlockZ" + " = " + "'" + String.valueOf(gobj.BlockZ)+  "'" + ";" ;
-		dbManage.initialize();
-		dbManage.deleteQuery(deletePF); 
-		dbManage.close();
+		ParaFulmine.getManager().deleteQuery(deletePF); 
 	}
 	
 	//These methods are  SELECT QUERIES to get info by passing blocks coordinates.
@@ -58,30 +54,26 @@ public class GoldintoDB extends PFintoDB{
 		  				  "BlockX" + " = " + "'" + String.valueOf(blockX) + "'" + "AND " +
 		  				  "BlockY" + " = " + "'" + String.valueOf(blockY) + "'" +  "AND " +
 		  				  "BlockZ" + " = " + "'" + String.valueOf(blockZ)+  "'" +";" ;
-		  dbManage.initialize();
-          ResultSet rs = dbManage.sqlQuery(selectID);
+          ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
           int Id = 0;
           try {
 			Id = rs.getInt("B_Id");
           } catch (SQLException e) {
 			e.printStackTrace();
           }
-          dbManage.close();
           return Id;  
 	}
 	//SELECT Query, SELECT the Record with the given id, return its Owner
 	public String getRecordOwner(int id){
 		String selectID = "SELECT Owner FROM " + tableName  + " WHERE " + 
 			              "B_Id " + " = " + "'" + String.valueOf(id) + "'"  + ";" ;
-		dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectID);
         String Owner ="";
 		try {
 			Owner = rs.getString("Owner");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         return Owner;
 	}
 	
@@ -90,15 +82,13 @@ public class GoldintoDB extends PFintoDB{
 		  					   "BlockX" + " = " + "'" + String.valueOf(blockX) + "'" + " AND " +
 		  					   "BlockY" + " = " + "'" + String.valueOf(blockY) + "'" +  " AND " +
 		  					   "BlockZ" + " = " + "'" + String.valueOf(blockZ)+  "'" +";" ;
-        dbManage.initialize();
-        ResultSet rs = dbManage.sqlQuery(selectcountID);
+        ResultSet rs = ParaFulmine.getManager().sqlQuery(selectcountID);
         int count = 0;
 		try {
 			count = rs.getInt("result");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        dbManage.close();
         if(count == 0){
         	return false;
         }

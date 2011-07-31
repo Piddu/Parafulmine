@@ -14,12 +14,14 @@ import com.nijikokun.bukkit.Permissions.Permissions;
 import org.bukkit.plugin.Plugin;
 
 public class ParaFulmine  extends JavaPlugin {
+	
+	static Logger log = Logger.getLogger("Minecraft");//Define your logger
 	//DB Directory Stuff
-	public String mainDirectory = "plugins" + File.separator + "ParaFulmine"; 
-	public File dir = new File(mainDirectory);
-	public String prefix = "[ParaFulmine]";
-	public String dbName = "parafulmineDB";
-	public sqlCore dbManage;
+	public static String mainDirectory = "plugins" + File.separator + "ParaFulmine"; 
+	public static File dir = new File(mainDirectory);
+	public static String prefix = "[ParaFulmine]";
+	public static String dbName = "parafulmineDB";
+	private static sqlCore dbManage = new sqlCore(log, prefix, dbName, mainDirectory );;
 		
 	//Create PFBlocks Create table Query
 	public String DBTableQuery ="CREATE TABLE PFBlocks" +
@@ -50,9 +52,12 @@ public class ParaFulmine  extends JavaPlugin {
     
     //Permission handler
     public static PermissionHandler permissionHandler;
-   
-    Logger log = Logger.getLogger("Minecraft");//Define your logger
     
+    //utils
+    public static sqlCore getManager(){
+    	return dbManage;
+    }
+           
     public void createPluginFolder(){
     	if(!this.dir.exists()){
     		log.info("Creating Parafulmine Plugin Folder");
@@ -84,7 +89,6 @@ public class ParaFulmine  extends JavaPlugin {
     PluginManager pm = this.getServer().getPluginManager();
     log.info("ParaFulmine Plugin ENABLED");
     createPluginFolder();
-    sqlCore dbManage = new sqlCore(this.log, this.prefix, this.dbName, this.mainDirectory );
     dbManage.initialize();
     if(!dbManage.checkTable("PFBlocks")){
     	 dbManage.createTable(DBTableQuery);
